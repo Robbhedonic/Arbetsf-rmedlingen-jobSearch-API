@@ -11,8 +11,15 @@ const searchJobs = async () => {
         console.log("-".repeat(50))
 
         data.hits.forEach((job: any, index: number) => {
+            const pubDate = new Date(job.publication_date);
+
             console.log(`${index + 1}. ${job.headline}`);
             console.log(`Company: ${job.employer.name}`);
+            console.log(`Occupation field: ${job.occupation_field.label}`);
+            console.log(`Employment type: ${job.employment_type.label}`);
+            console.log(`Country: ${job.workplace_address.country}`);
+            console.log(`Region: ${job.workplace_address.region}`);
+            console.log(`Publication: ${pubDate.toISOString().split("T")[0]}`);
         });
     }
     catch (error){
@@ -20,4 +27,14 @@ const searchJobs = async () => {
     }
 };
 
-searchJobs();
+const rumApp = () => {
+    try{
+        console.log("Welcome to the Job Search app ")
+        searchJobs();
+    }
+    catch(error){
+        console.error(error); 
+    }
+};
+
+rumApp();
