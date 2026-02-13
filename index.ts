@@ -1,0 +1,23 @@
+// A function that searches for jobs
+// A function that runs our app
+// the command to start everything 
+const searchJobs = async () => {
+    try {
+        const result = `https://jobsearch.api.jobtechdev.se/search?q=helsingborg&offset=0&limit=10`;
+        const response = await fetch(result);
+        const data = await response.json();
+
+        console.log(`\nFound ${data.hits.length} jobs in Helsingborg`);
+        console.log("-".repeat(50))
+
+        data.hits.forEach((job: any, index: number) => {
+            console.log(`${index + 1}. ${job.headline}`);
+            console.log(`Company: ${job.employer.name}`);
+        });
+    }
+    catch (error){
+        console.error(error);
+    }
+};
+
+searchJobs();
