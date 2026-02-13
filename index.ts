@@ -1,13 +1,13 @@
 // A function that searches for jobs
 // A function that runs our app
 // the command to start everything 
-const searchJobs = async () => {
+const searchJobs = async (keyword: string) => {
     try {
-        const result = `https://jobsearch.api.jobtechdev.se/search?q=helsingborg&offset=0&limit=10`;
+        const result = `https://jobsearch.api.jobtechdev.se/search?q=${keyword}&offset=0&limit=10`;
         const response = await fetch(result);
         const data = await response.json();
 
-        console.log(`\nFound ${data.hits.length} jobs in Helsingborg`);
+        console.log(`\nFound ${data.hits.length} jobs`);
         console.log("-".repeat(50))
 
         data.hits.forEach((job: any, index: number) => {
@@ -29,8 +29,10 @@ const searchJobs = async () => {
 
 const rumApp = () => {
     try{
-        console.log("Welcome to the Job Search app ")
-        searchJobs();
+        console.log("Welcome to the Job Search app "),
+        console.log("This app searches for jobs using JobbTeach Api");
+        const keyword = "Helsingborg";
+        searchJobs(keyword);;
     }
     catch(error){
         console.error(error); 
