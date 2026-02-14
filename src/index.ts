@@ -1,12 +1,13 @@
 import { JobSearchResponse, Job } from "./models.js";
 
-const searchJobs = async (keyword: string) => {
+const searchJobs = async (profession: string, city: string) => {
+  const query = `${profession} in ${city}`;
   try {
-    const url = `https://jobsearch.api.jobtechdev.se/search?q=${keyword}&offset=0&limit=10`;
+    const url = `https://jobsearch.api.jobtechdev.se/search?q=${encodeURIComponent(query)}&offset=0&limit=10`;
     const response = await fetch(url);
     const data = (await response.json()) as JobSearchResponse;
 
-    console.log(`\nFound ${data.hits.length} jobs`);
+    console.log(`\nFound ${data.hits.length} jobs for "${query}"`);
     console.log("-".repeat(50));
 
     data.hits.forEach((job: Job, index: number) => {
@@ -29,9 +30,7 @@ const rumApp = async () => {
   try {
     console.log("Welcome to the Job Search app ");
     console.log("This app searches for jobs using JobbTeach Api");
-    const keyword = "Helsingborg";
-
-    await searchJobs(keyword);
+    await searchJobs();
   } catch (error) {
     console.error(error);
   }
