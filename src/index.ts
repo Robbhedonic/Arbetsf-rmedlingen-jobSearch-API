@@ -1,14 +1,23 @@
-import { JobSearchResponse, Job } from "./models.js";
+import { JobSearchResponse, Job } from './models.js';
 
 const searchJobs = async (profession: string, city: string) => {
-  const query = `${profession} in ${city}`;
   try {
+    const query = `${profession} in ${city}`;
     const url = `https://jobsearch.api.jobtechdev.se/search?q=${encodeURIComponent(query)}&offset=0&limit=10`;
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`API request failed with status: ${response.status}`);
+    }
+
     const data = (await response.json()) as JobSearchResponse;
-    console.log(`Search: "${query}"`);
+
+    if (!data.hits.length) {
+      console.log(`No jobs found for "${query}"`);
+      return;
+    }
+
     console.log(`\nFound ${data.hits.length} jobs for "${query}"`);
-    console.log("-".repeat(50));
+    console.log('-'.repeat(50));
 
     data.hits.forEach((job: Job, index: number) => {
       const pubDate = new Date(job.publication_date);
@@ -19,7 +28,7 @@ const searchJobs = async (profession: string, city: string) => {
       console.log(`Employment type: ${job.employment_type.label}`);
       console.log(`Country: ${job.workplace_address.country}`);
       console.log(`Region: ${job.workplace_address.region}`);
-      console.log(`Publication: ${pubDate.toISOString().split("T")[0]}`);
+      console.log(`Publication: ${pubDate.toISOString().split('T')[0]}`);
     });
   } catch (error) {
     console.error(error);
@@ -28,9 +37,9 @@ const searchJobs = async (profession: string, city: string) => {
 
 const rumApp = async () => {
   try {
-    console.log("Welcome to the Job Search app ");
-    console.log("This app searches for jobs using JobbTeach Api");
-    await searchJobs("Software Developer", "Malmö");
+    console.log('Welcome to the Job Search app ');
+    console.log('This app searches for jobs using JobbTeach Api');
+    await searchJobs('Software Developer', 'Malmö');
   } catch (error) {
     console.error(error);
   }

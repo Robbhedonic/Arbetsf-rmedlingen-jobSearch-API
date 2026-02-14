@@ -26,7 +26,7 @@ export default defineConfig([
     },
     rules: {
       // Code formatting
-      'prettier/prettier': 'error',
+      'prettier/prettier': ['error', { "singleQuote": true }],
       'capitalized-comments': ['error', 'always'],
 
       // Consistent Arrow Functions
@@ -52,4 +52,7 @@ export default defineConfig([
       ],
     },
   },
+  {
+  ignores: ['eslint.config.ts', 'dist/**'],
+}
 ]);
