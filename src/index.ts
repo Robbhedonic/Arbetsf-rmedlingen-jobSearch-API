@@ -6,7 +6,7 @@ const searchJobs = async (profession: string, city: string) => {
     const url = `https://jobsearch.api.jobtechdev.se/search?q=${encodeURIComponent(query)}&offset=0&limit=10`;
     const response = await fetch(url);
     const data = (await response.json()) as JobSearchResponse;
-
+    console.log(`Search: "${query}"`);
     console.log(`\nFound ${data.hits.length} jobs for "${query}"`);
     console.log("-".repeat(50));
 
@@ -30,10 +30,14 @@ const rumApp = async () => {
   try {
     console.log("Welcome to the Job Search app ");
     console.log("This app searches for jobs using JobbTeach Api");
-    await searchJobs();
+    await searchJobs("Software Developer", "Malmö");
   } catch (error) {
     console.error(error);
   }
 };
 
-await rumApp();
+const main = async () => {
+  await rumApp();
+};
+
+main().catch((err) => console.error(err));
