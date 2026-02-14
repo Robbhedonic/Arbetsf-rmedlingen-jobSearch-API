@@ -21,8 +21,13 @@ const searchJobs = async (profession: string, city: string) => {
 
     data.hits.forEach((job: Job, index: number) => {
       const pubDate = new Date(job.publication_date);
+      //Note toISOString() returns the date in standard UTC format: 2026-02-14T00:00:00.000Z
+      //Note toString() returns the date in a human-readable format using the local time zone
+      console.log(pubDate.toISOString());
+      console.log(pubDate.toString());
 
       console.log(`${index + 1}. ${job.headline}`);
+      console.dir(job, { depth: 2 });
       console.log(`Company: ${job.employer.name}`);
       console.log(`Occupation field: ${job.occupation_field.label}`);
       console.log(`Employment type: ${job.employment_type.label}`);
@@ -30,12 +35,19 @@ const searchJobs = async (profession: string, city: string) => {
       console.log(`Region: ${job.workplace_address.region}`);
       console.log(`Publication: ${pubDate.toISOString().split('T')[0]}`);
     });
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('An error occurred while fetching jobs:');
+      console.error(error.message);
+      console.dir(error, { depth: 2 });
+    } else {
+      console.error('An unexpected non-error was thrown:');
+      console.dir(error, { depth: 2 });
+    }
+  } // <- ESTE ES EL cierre correcto del catch
 };
 
-const rumApp = async () => {
+const runApp = async () => {
   try {
     console.log('Welcome to the Job Search app ');
     console.log('This app searches for jobs using JobbTeach Api');
@@ -46,7 +58,7 @@ const rumApp = async () => {
 };
 
 const main = async () => {
-  await rumApp();
+  await runApp();
 };
 
 main().catch((err) => console.error(err));
